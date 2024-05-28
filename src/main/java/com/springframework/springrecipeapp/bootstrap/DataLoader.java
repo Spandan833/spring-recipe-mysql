@@ -18,6 +18,7 @@ import java.util.Optional;
 
 @Slf4j
 @Component
+@Profile("default")
 public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     private final CategoryRepository categoryRepository;
@@ -32,7 +33,6 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     @Override
     @Transactional
-    @Profile("default")
     public void onApplicationEvent(ContextRefreshedEvent event) {
         log.debug("Loading Bootstrap data");
         recipeRepository.saveAll(this.getRecipes());
