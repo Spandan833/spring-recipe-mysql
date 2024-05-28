@@ -4,139 +4,179 @@
     <meta charset="UTF-8"/>
     <title>Show Recipe</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"
-          th:href="@{/webjars/bootstrap/5.1.3/css/bootstrap.min.css}">
-
-    <script
-            src="https://code.jquery.com/jquery-3.6.0.min.js"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/1hb7b4DeX9mFMW4HRJcJc5EWHzRJfA6Ibvo1Qn" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .card {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .card-header {
+            border-radius: 10px 10px 0 0;
+            background-color: #007bff;
+        }
+        .card-title {
+            font-size: 1.5rem;
+        }
+        .card-header h2, .card-header h7 {
+            color: white;
+        }
+        .table-hover tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+        .btn-light {
+            color: #007bff;
+            border: 1px solid #007bff;
+        }
+        .btn-light:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .fa-plus-circle, .fa-eye, .fa-edit, .fa-trash {
+            margin-right: 5px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        ul li {
+            margin-bottom: 5px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-            crossorigin="anonymous" th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
-
+            crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-            crossorigin="anonymous" th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.min.js}"></script>
+            crossorigin="anonymous"></script>
 </head>
 <body>
-<header th:replace="~{fragments/navbar.html :: navbar}" ></header>
-<h2 th:text="${recipe.description}">Recipe Name</h2>
-<div class="container-fluid" style="margin-top: 20px">
+<header th:replace="~{fragments/navbar.html :: navbar}"></header>
+<div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-6 col-md-offset-3">
-            <div class="panel-group">
-                <div class="card card-primary border border-primary" style="margin: 20px 0">
-                    <div class="card-header bg-primary text-light row">
-                        <h7 class="card-title" th:text="${recipe.description}">Recipe Description Here!</h7>
-                        <div class="col-md-1">
-                            <a class="btn btn-light" href="#" th:href="@{'/recipe/' + ${recipe.id} + '/image'}" role="button">Change Image</a>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row justify-content-center">
-                            <div class="col-md-3">
-                                <h7>Categories:</h7>
-                            </div>
-                            <div class="col-md-9">
-                                <ul>
-                                    <!--/*@thymesVar id="recipe" type="com.springframework.springrecipeapp.domain.Recipe"*/-->
-                                    <li th:each="category : ${recipe.categories}" th:text="${category.description}">cat one</li>
-                                </ul>
-                            </div>
-                            <div class="col-md-6">
-                                <img src="../../static/images/guacamole400x400WithX.jpg"
-                                     th:src="@{'/recipe/'+${recipe.getId()}+'/recipeimage'}"
-                                     width="200" height="200">
-                            </div>
-                        </div>
-                        <div class="row justify-content-center">
-                            <div class="col-md-3">
-                                <h7>Prep Time:</h7>
-                            </div>
-                            <div class="col-md-3">
-                                <p th:text="${recipe.prepTime}">30 min</p>
-                            </div>
-                            <div class="col-md-3">
-                                <h7>Difficulty:</h7>
-                            </div>
-                            <div class="col-md-3">
-                                <p th:text="${recipe.difficulty}">Siadskd</p>
-                            </div>
-                        </div>
-                        <div class="row justify-content-center">
-                            <div class="col-md-3">
-                                <h7>Cooktime:</h7>
-                            </div>
-                            <div class="col-md-3">
-                                <p th:text="${(recipe.cookTime + ' Min')} ">30 min</p>
-                            </div>
-                            <div class="col-md-3">
-                                <h7>Servings:</h7>
-                            </div>
-                            <div class="col-md-3">
-                                <p th:text="${(recipe.getServings())}">4</p>
-                            </div>
-                        </div>
-                        <div class="row justify-content-center">
-                            <div class="col-md-3">
-                                <h7>Source:</h7>
-                            </div>
-                            <div class="col-md-3">
-                                <p>30 min</p>
-                            </div>
-                            <div class="col-md-3">
-                                <h7>URL:</h7>
-                            </div>
-                            <div class="col-md-3">
-                                <p  th:text="${(recipe.getUrl())}"> http://www.example.com</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card card-primary border border-primary" style="margin: 20px 0;">
+        <div class="col-md-8">
+            <h2 class="text-center" th:text="${recipe.description}">Recipe Name</h2>
 
-                    <div class="card-header bg-primary text-light mb-3">
-                        <div class="row">
-                            <div class="col-md-11 ">
-                                <h2 class="card-title">Ingredients</h2>
-                            </div>
-                            <div class="col-md-1">
-                                <a class="btn btn-light" href="#" th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}" role="button">View</a>
-                            </div>
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h7 class="mb-0" th:text="${recipe.description}">Recipe Description Here!</h7>
+                    <a class="btn btn-light" th:href="@{'/recipe/' + ${recipe.id} + '/image'}" role="button">Change Image</a>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h7>Categories:</h7>
+                            <ul>
+                                <li th:each="category : ${recipe.categories}" th:text="${category.description}">cat one</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <img src="../../static/images/guacamole400x400WithX.jpg"
+                                 th:src="@{'/recipe/'+${recipe.getId()}+'/recipeimage'}"
+                                 class="img-fluid rounded">
                         </div>
                     </div>
+                    <div class="row mt-4">
+                        <div class="col-md-3">
+                            <h7>Prep Time:</h7>
+                            <p th:text="${recipe.prepTime}">30 min</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h7>Difficulty:</h7>
+                            <p th:text="${recipe.difficulty}">Medium</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h7>Cook Time:</h7>
+                            <p th:text="${recipe.cookTime + ' Min'}">30 min</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h7>Servings:</h7>
+                            <p th:text="${recipe.getServings()}">4</p>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-3">
+                            <h7>Source:</h7>
+                            <p th:text="${recipe.source}">Family Recipe</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h7>URL:</h7>
+                            <p><a th:href="${recipe.url}" th:text="${recipe.url}">http://www.example.com</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                    </div>
-                    <div class="card-body">
-                        <div class="row justify-content-center">
-                            <div class="col-md-12">
-                                <ul>
-                                    <li th:each="ingredient : ${recipe.ingredients}" th:text="${(ingredient.getAmount() +' '+ ingredient.unitOfMeasure.description +' '+ ingredient.description)}"></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">Ingredients</h2>
+                    <a class="btn btn-light" th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}" role="button">View</a>
                 </div>
-                <div class="card card-primary border border-primary" style="margin: 20px 0;">
-                    <div class="card-header bg-primary text-light">
-                        <h7 class="card-title" >Directions</h7>
-                    </div>
-                    <div class="card-body">
-                        <div class="row justify-content-center">
-                            <div class="col-md-12" >
-                                <p th:text="${recipe.directions}">Some direction</p></div>
-                        </div>
-                    </div>
+                <div class="card-body">
+                    <ul>
+                        <li th:each="ingredient : ${recipe.ingredients}" th:text="${ingredient.amount + ' ' + ingredient.unitOfMeasure.description + ' ' + ingredient.description}"></li>
+                    </ul>
                 </div>
-                <div class="card card-primary border border-primary" style="margin: 20px 0;">
-                    <div class="card-header bg-primary text-light">
-                        <h7 class="card-title" >Notes</h7>
-                    </div>
-                    <div class="card-body">
-                        <div class="row justify-content-center">
-                            <div class="col-md-12">
-                                <p th:text="${recipe.note.recipeNotes}">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum.</p>
-                            </div>
-                        </div>
-                    </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">Directions</h2>
+                </div>
+                <div class="card-body">
+                    <p th:text="${recipe.directions}">
+                        This Hyderabadi Chicken Biryani gets a lot of its flavor from the marinade.
+                        We are using yogurt as a tenderiser, fried onions (birista), tomato puree, red chili powder,
+                        turmeric powder, coriander powder, garam masala and salt to flavor the chicken. It's important to marinate
+                        the chicken in a large bowl for at least two hours or overnight for the maximum flavor. Like I said before,
+                        I prefer using only chicken thighs and legs for chicken biryani because these are the juiciest
+                        and do not become dry while the biryani cooks
+
+                        Once you have your chicken marinated, rice and fried onions ready, start by cooking the marinated chicken.
+                        To cook the chicken, place it in the dutch oven or a large pot that you plan to use for cooking the biryani,
+                        and cook them for 7 minutes. There is no need to stir the chicken, only flip it once around the 4 minute mark.
+
+                        Once the chicken is partially cooked, the next step is to layer it with the fried onions, mint
+                        and coriander. The onions add sweetness and richness while the herbs add a ton of flavor and freshness.
+
+                        The final step is layering with 70% cooked basmati rice. Sprinkle saffron milk and ghee on top
+                        and cover tightly with a lid. Originally, the pot was sealed with dough to prevent steam from escaping,
+                        but a tight lid works just as well. It's important to cook this on a low flame so that the heat distributes
+                        evenly and the bottom doesn't get burnt.
+
+                        And there you go! The whole thing takes approximately an hour so I call this a weekend project,
+                        but after you've done it once, you'll realize how easy and simple making biryani at home is!
+                        The results of your labour will look like this, and trust me, there is nothing like the smell
+                        of chicken biryani wafting through the house to get everyone to the table!
+
+                        Let's just say - five attempts to make sure I provide you with instructions that you can
+                        actually follow with ease at home did not seem like work.
+
+
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">Notes</h2>
+                </div>
+                <div class="card-body">
+                    <p th:text="${recipe.note.recipeNotes}">
+                        On the other hand, we denounce with righteous indignation and dislike men who are so beguiled
+                        and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee
+                        the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through
+                        weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple
+                        and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being
+                        able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and
+                        owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated
+                        and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection:
+                        he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pai
+                    </p>
                 </div>
             </div>
         </div>
@@ -144,8 +184,3 @@
 </div>
 </body>
 </html>
-<style>
-    h7{
-        font-weight: bold;
-    }
-</style>
