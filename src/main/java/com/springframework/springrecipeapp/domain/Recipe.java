@@ -43,6 +43,9 @@ public class Recipe {
     @JoinTable(name="recipe_category", joinColumns = @JoinColumn(name="recipe_id"),inverseJoinColumns = @JoinColumn(name="category_id"))
     private Set<Category> categories = new HashSet<>();
 
+    @ManyToOne
+    private User contributor;
+
     public void setNotes(Notes note) {
         if(note == null) return;
         this.note = note;
