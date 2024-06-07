@@ -54,7 +54,6 @@ public class IngredientController {
         return "recipe/ingredient/ingredientform";
     }
 
-
     @RequestMapping("recipe/{recipeId}/ingredients/{ingredientId}/show")
     public String getIngredient(@PathVariable String recipeId,@PathVariable String ingredientId, Model model){
         Long recipeIdLong = parseLong(recipeId);

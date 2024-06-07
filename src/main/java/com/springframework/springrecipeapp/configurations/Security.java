@@ -1,7 +1,9 @@
 package com.springframework.springrecipeapp.configurations;
 
+import com.springframework.springrecipeapp.Authorisation.CustomAuthenticationHandler;
 import com.springframework.springrecipeapp.repsositories.UserRepository;
 import com.springframework.springrecipeapp.services.UserService;
+import com.springframework.springrecipeapp.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.proxy.NoOp;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +22,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
@@ -30,9 +33,17 @@ public class Security {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private UserService userService;
+
     @Bean
     public static PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return new CustomAuthenticationHandler(userService);
     }
 
     @Bean
@@ -46,7 +57,7 @@ public class Security {
                         form -> form
                                 .loginPage("/login")
                                 .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("/")
+                                .successHandler(authenticationSuccessHandler())
                                 .permitAll()
                 ).logout(
                         logout -> logout

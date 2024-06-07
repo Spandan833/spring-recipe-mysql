@@ -4,9 +4,13 @@ import com.springframework.springrecipeapp.commands.RecipeCommand;
 import com.springframework.springrecipeapp.coverters.RecipeCommandToRecipe;
 import com.springframework.springrecipeapp.coverters.RecipeToRecipeCommand;
 import com.springframework.springrecipeapp.domain.Recipe;
+import com.springframework.springrecipeapp.domain.User;
 import com.springframework.springrecipeapp.exceptions.NotFoundException;
+import com.springframework.springrecipeapp.repsositories.RecipeRepository;
+import com.springframework.springrecipeapp.repsositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -21,10 +25,13 @@ public class RecipeServiceJpa implements RecipeService {
     private final RecipeCommandToRecipe recipeCommandToRecipe;
     private final RecipeToRecipeCommand recipeToRecipeCommand;
 
-    public RecipeServiceJpa(com.springframework.springrecipeapp.repsositories.RecipeRepository recipeRespository, RecipeCommandToRecipe recipeCommandToRecipe, RecipeToRecipeCommand recipeToRecipeCommand) {
+    private final UserRepository userRepository;
+
+    public RecipeServiceJpa(RecipeRepository recipeRespository,UserRepository userRepository, RecipeCommandToRecipe recipeCommandToRecipe, RecipeToRecipeCommand recipeToRecipeCommand) {
         this.recipeRespository = recipeRespository;
         this.recipeCommandToRecipe = recipeCommandToRecipe;
         this.recipeToRecipeCommand = recipeToRecipeCommand;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -61,8 +68,11 @@ public class RecipeServiceJpa implements RecipeService {
     }
 
     @Override
-    public void deleteById(Long id) {
-        recipeRespository.deleteById(id);
+    public void deleteByUserIdAndRecipeId(Long userId, Long recipeId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        user.getUserRecipes().removeIf(recipe -> recipe.getId().equals(recipeId));
+        userRepository.save(user);
+        recipeRespository.deleteById(recipeId);
     }
 
     @Override

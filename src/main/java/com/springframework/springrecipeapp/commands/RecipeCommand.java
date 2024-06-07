@@ -1,6 +1,7 @@
 package com.springframework.springrecipeapp.commands;
 
 import com.springframework.springrecipeapp.domain.Difficulty;
+import com.springframework.springrecipeapp.domain.User;
 import lombok.*;
 import org.hibernate.validator.constraints.URL;
 
@@ -43,4 +44,6 @@ public class RecipeCommand {
     private Difficulty difficulty;
     private NotesCommand notes;
     private Set<CategoryCommand> categories = new HashSet<>();
+
+    private long contributorId;
 }

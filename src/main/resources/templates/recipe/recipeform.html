@@ -55,7 +55,7 @@
 <div class="container-fluid" style="margin-top: 20px">
     <div class="justify-content-center">
         <div class="col-md-6 offset-md-3">
-            <form th:object="${recipe}" th:action="@{/recipe}" method="post">
+            <form th:object="${recipe}" th:action="@{'/user/'+${recipe.getContributorId()}+'/recipe'}" method="post">
                 <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
                     Please correct errors below
                 </div>

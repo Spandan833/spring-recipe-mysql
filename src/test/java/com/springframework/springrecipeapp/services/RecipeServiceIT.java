@@ -4,6 +4,8 @@ import com.springframework.springrecipeapp.commands.RecipeCommand;
 import com.springframework.springrecipeapp.coverters.RecipeCommandToRecipe;
 import com.springframework.springrecipeapp.coverters.RecipeToRecipeCommand;
 import com.springframework.springrecipeapp.domain.Recipe;
+import com.springframework.springrecipeapp.domain.User;
+import com.springframework.springrecipeapp.repsositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +22,9 @@ class RecipeServiceIT {
 
     @Autowired
     RecipeService recipeService;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Autowired
     com.springframework.springrecipeapp.repsositories.RecipeRepository recipeRepository;
@@ -39,8 +44,14 @@ class RecipeServiceIT {
     void saveRecipeCommand() {
         Iterable<Recipe> recipes = recipeService.findAll();
         Recipe recipe = recipes.iterator().next();
+        User user = new User();
+        user.setId(1L);
+        user.setName("Some Name");
+        user.setEmail("Some@gmail.com");
+        user.setPassword("dummy");
+        userRepository.save(user);
+        recipe.setContributor(user);
         RecipeCommand recipeCommand = recipeToRecipeCommand.convert(recipe);
-
         recipeCommand.setDescription(NEW_DESCIPTION);
         RecipeCommand savedRecipeCommand = recipeService.saveRecipeCommand(recipeCommand);
 

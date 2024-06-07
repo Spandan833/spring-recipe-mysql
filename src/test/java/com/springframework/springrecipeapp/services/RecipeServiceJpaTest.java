@@ -4,8 +4,10 @@ import com.springframework.springrecipeapp.commands.RecipeCommand;
 import com.springframework.springrecipeapp.coverters.RecipeCommandToRecipe;
 import com.springframework.springrecipeapp.coverters.RecipeToRecipeCommand;
 import com.springframework.springrecipeapp.domain.Recipe;
+import com.springframework.springrecipeapp.domain.User;
 import com.springframework.springrecipeapp.exceptions.NotFoundException;
 import com.springframework.springrecipeapp.repsositories.RecipeRepository;
+import com.springframework.springrecipeapp.repsositories.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,11 +33,14 @@ class RecipeServiceJpaTest {
     @Mock
     RecipeRepository recipeRepository;
 
+    @Mock
+    UserRepository userRepository;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        recipeService = new RecipeServiceJpa(recipeRepository,recipeCommandToRecipe,recipeToRecipeCommand);
+        recipeService = new RecipeServiceJpa(recipeRepository,userRepository,recipeCommandToRecipe,recipeToRecipeCommand);
     }
 
     @AfterEach
@@ -90,8 +95,8 @@ class RecipeServiceJpaTest {
 
     @Test
     void deleteById() {
-        recipeService.deleteById(2L);
-
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
+        recipeService.deleteByUserIdAndRecipeId(3L,2L);
         Mockito.verify(recipeRepository, times(1)).deleteById(eq(2L));
     }
 

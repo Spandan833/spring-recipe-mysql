@@ -39,6 +39,6 @@ public class User
             inverseJoinColumns={@JoinColumn(name="ROLE_ID", referencedColumnName="ID")})
     private List<Role> roles = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "contributor")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH, mappedBy = "contributor")
     private List<Recipe> userRecipes = new ArrayList<>();
 }
