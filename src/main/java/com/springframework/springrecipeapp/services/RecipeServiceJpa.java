@@ -63,6 +63,11 @@ public class RecipeServiceJpa implements RecipeService {
     }
 
     @Override
+    public Recipe save(Recipe recipe) {
+        return recipeRespository.save(recipe);
+    }
+
+    @Override
     public void delete(Recipe recipe) {
         recipeRespository.delete(recipe);
     }

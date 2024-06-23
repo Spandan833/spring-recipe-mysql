@@ -72,6 +72,17 @@
         .hero p {
             font-size: 1.25rem;
         }
+
+       a {
+    color: inherit;
+    text-decoration: none;
+}
+
+a:hover {
+    color:#00A0C6;
+    text-decoration:none;
+    cursor:pointer;
+}
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
@@ -81,34 +92,8 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="#">
-            <img src="images/recipe_logo.jpeg" alt="Logo" height="30">
-        </a>
-        <h3 class="title">Recipe Hub</h3>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{'/logout'}" role="button">Log out</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
 
+<header th:replace="~{fragments/navbar.html :: navbar}"></header>
 <div class="hero">
     <div class="hero-text">
         <h1>Welcome to Recipe Hub</h1>
@@ -118,42 +103,35 @@
 
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm">
+        <div class="col-md-12">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0"><i class="fas fa-book-open"></i>My Recipes</h5>
-                    <a class="btn btn-light" th:href="@{'/recipe/new'}" role="button"><i class="fas fa-plus-circle"></i> Add</a>
+                    <h5 class="mb-0"><i class="fas fa-book-open"></i>Featured Recipes</h5>
+                    <a class="btn btn-light" th:href="@{'/userRecipes'}" role="button"><i class="fas fa-plus-circle"></i>My Recipes</a>
                 </div>
                 <div class="card-body">
                     <div th:if="${!#lists.isEmpty(recipes)}">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="thead-dark">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Description</th>
-                                    <th>Actions</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="recipe : ${recipes}">
-                                    <td th:text="${recipe.id}">123</td>
-                                    <td th:text="${recipe.description}">Tasty Goodness</td>
-                                    <td>
-                                        <a th:href="@{'/recipe/' + ${recipe.id} + '/show'}" class="btn btn-info btn-sm btn-action" title="View">View</a>
-                                        <a th:href="@{'/recipe/' + ${recipe.id} + '/update'}" class="btn btn-warning btn-sm btn-action" title="Update">Update</a>
-                                        <a th:href="@{'/recipe/' + ${recipe.id} + '/delete'}" class="btn btn-danger btn-sm btn-action" title="Delete">Delete</a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-5">
+                            <div class="col" th:each="recipe : ${recipes}">
+                                <div class="card shadow-sm h-100">
+                                    <img th:src="@{'/recipe/'+${recipe.getId()}+'/recipeimage'}" class="card-img-top" alt="Recipe Image" style="height: 225px; object-fit: cover;">
+                                    <div class="card-body d-flex flex-column">
+                                        <p class="card-text" th:text="${recipe.description}">Tasty Goodness</p>
+                                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                                            <div class="btn-group">
+                                                <a th:href="@{'/recipe/' + ${recipe.id} + '/show'}" class="btn btn-sm btn-outline-secondary">View</a>
+                                            </div>
+                                            <small class="text-body-secondary" th:text="${recipe.cookTime}"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                     <div th:if="${#lists.isEmpty(recipes)}" class="alert alert-info" role="alert">
                         No recipes available.
                     </div>
                 </div>
-            </div>
         </div>
     </div>
 </div>

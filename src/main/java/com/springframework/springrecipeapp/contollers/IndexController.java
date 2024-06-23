@@ -1,5 +1,6 @@
 package com.springframework.springrecipeapp.contollers;
 
+import com.springframework.springrecipeapp.domain.Recipe;
 import com.springframework.springrecipeapp.domain.User;
 import com.springframework.springrecipeapp.services.RecipeService;
 import com.springframework.springrecipeapp.services.UserService;
@@ -10,6 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Collection;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -26,7 +30,11 @@ public class IndexController {
 
     @RequestMapping({"","/","/index","/index.html"})
     public String getHome(Model model, @AuthenticationPrincipal UserDetails userDetails){
+        List<Recipe> publishedRecipes = recipeService.findAll().stream()
+                                                        .filter(recipe -> recipe.isPublished()).toList();
         User user = userService.findUserByEmail(userDetails.getUsername());
-        return "redirect:/user/" + user.getId() + "/recipes";
+        model.addAttribute("recipes",publishedRecipes);
+        model.addAttribute("loggedInUser",user);
+        return "index";
     }
 }

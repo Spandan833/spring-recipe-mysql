@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -41,4 +43,13 @@ public class User
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH, mappedBy = "contributor")
     private List<Recipe> userRecipes = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH, mappedBy = "contributor")
+    private Set<Recipe> publishedRecipes = new HashSet<>();
+
+    public Recipe publishRecipe(Recipe recipe){
+        publishedRecipes.add(recipe);
+        recipe.setPublished(true);
+        return recipe;
+    }
 }

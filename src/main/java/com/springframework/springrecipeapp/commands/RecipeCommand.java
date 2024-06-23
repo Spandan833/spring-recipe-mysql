@@ -2,6 +2,7 @@ package com.springframework.springrecipeapp.commands;
 
 import com.springframework.springrecipeapp.domain.Difficulty;
 import com.springframework.springrecipeapp.domain.User;
+import jakarta.persistence.Lob;
 import lombok.*;
 import org.hibernate.validator.constraints.URL;
 
@@ -33,6 +34,7 @@ public class RecipeCommand {
     @Min(1)
     @Max(99)
     private Integer servings;
+    @Lob
     private Byte[] image;
     private String source;
     @URL

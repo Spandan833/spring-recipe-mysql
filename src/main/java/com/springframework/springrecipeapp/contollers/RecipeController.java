@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 
+import java.security.Principal;
+
 import static java.lang.Long.parseLong;
 
 @Controller
@@ -35,15 +37,21 @@ public class RecipeController {
     }
 
     @GetMapping("recipe/{id}/show")
-    public String getRecipeById(@PathVariable String id, Model model){
-        model.addAttribute("recipe",recipeService.findById(parseLong(id)));
-        return "recipe/show";
+    public String getRecipeById(@PathVariable String id, Model model, @AuthenticationPrincipal UserDetails user){
+        Recipe recipe = recipeService.findById(parseLong(id));
+        if(recipe.isPublished() || recipe.getContributor().getEmail().equals(user.getUsername())){
+            model.addAttribute("loggedInUser", recipe.getContributor());
+            model.addAttribute("recipe",recipe);
+            return "recipe/show";
+        }
+        throw new NotFoundException("Recipe Not Found");
     }
 
-    @GetMapping("user/{id}/recipe/new")
-    public String newRecipe(@PathVariable String id, Model model){
+    @GetMapping("/recipe/new")
+    public String newRecipe(Model model,@AuthenticationPrincipal UserDetails userDetails){
+        User user = userService.findUserByEmail(userDetails.getUsername());
         RecipeCommand recipeCommand = new RecipeCommand();
-        recipeCommand.setContributorId(parseLong(id));
+        recipeCommand.setContributorId(user.getId());
         model.addAttribute("recipe",recipeCommand);
         return "recipe/recipeform";
     }
@@ -66,9 +74,11 @@ public class RecipeController {
         return "redirect:recipe/"+saveCommand.getId()+"/show";
     }
 
-    @GetMapping("user/{id}/recipes")
-    public String getRecipesByAuthor(@PathVariable String id, Model model){
-        model.addAttribute("user",userService.findUserById(parseLong(id)));
+    @GetMapping("/userRecipes")
+    public String getRecipesByAuthor(Model model,@AuthenticationPrincipal UserDetails userDetails){
+        User user = userService.findUserByEmail(userDetails.getUsername());
+
+        model.addAttribute("loggedInUser",userService.findUserById(user.getId()));
         return "recipe/userRecipes";
     }
 
@@ -88,8 +98,29 @@ public class RecipeController {
 
     @GetMapping("recipe/{id}/delete")
     public String delete(@PathVariable String id,@AuthenticationPrincipal UserDetails userDetails){
+
         User user = userService.findUserByEmail(userDetails.getUsername());
         recipeService.deleteByUserIdAndRecipeId(user.getId(),parseLong(id));
+        return "redirect:/";
+    }
+
+//    @PostMapping("user/{userId}/recipe/{recipeId}/publish")
+//    public String publishRecipe(@PathVariable String userId, @PathVariable String recipeId,
+//                                @AuthenticationPrincipal Principal principal){
+//
+//    }
+
+    @GetMapping("/recipe/{recipeId}/publish")
+    public String publish(@PathVariable String recipeId,Model model,@AuthenticationPrincipal UserDetails userDetails){
+        Recipe recipe = recipeService.findById(parseLong(recipeId));
+        User user = recipe.getContributor();
+        if(!userDetails.getUsername().equals(user.getEmail())){
+            log.error("You do not have this permission");
+            return "redirect:/";
+        }
+
+        Recipe published = user.publishRecipe(recipe);
+        recipeService.save(published);
         return "redirect:/";
     }
 

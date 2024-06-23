@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8"/>
     <title>Show Recipe</title>
@@ -64,7 +64,10 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h7 class="mb-0" th:text="${recipe.description}">Recipe Description Here!</h7>
-                    <a class="btn btn-light" th:href="@{'/recipe/' + ${recipe.id} + '/image'}" role="button">Change Image</a>
+                    <div class="mx-2" th:if= "${#authentication.principal.getUsername().equals(recipe.getContributor().getEmail())}">
+                        <a class="btn btn-light" th:href="@{'/recipe/' + ${recipe.id} + '/image'}" role="button">Change Image</a>
+                        <a  class="btn btn-light" th:href="@{'/recipe/' + ${recipe.id} + '/publish'}" th:if= "${!recipe.isPublished()}" role="button">Publish</a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row">

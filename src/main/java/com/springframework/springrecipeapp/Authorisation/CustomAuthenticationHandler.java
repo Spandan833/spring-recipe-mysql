@@ -25,6 +25,6 @@ public class CustomAuthenticationHandler
 
         long userId = userService.findUserByEmail(authentication.getName()).getId();
 
-        response.sendRedirect("/user/"+userId+"/recipes");
+        response.sendRedirect("/");
     }
 }

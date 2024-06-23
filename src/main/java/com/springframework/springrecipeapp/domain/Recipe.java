@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.Type;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -34,6 +36,7 @@ public class Recipe {
     private Set<Ingredient> ingredients = new HashSet<>();
 
     @Lob
+    @Column(columnDefinition = "LONGBLOB")
     private Byte[] image;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -46,6 +49,8 @@ public class Recipe {
     @ManyToOne
     private User contributor;
 
+    private boolean isPublished;
+
     public void setNotes(Notes note) {
         if(note == null) return;
         this.note = note;
@@ -57,5 +62,6 @@ public class Recipe {
         ingredient.setRecipe(this);
         return this;
     }
+
 
 }
